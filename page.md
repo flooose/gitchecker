@@ -1,0 +1,51 @@
+
+
+
+```r
+library(rmarkdown)
+blub <- sample(1:100, 1)
+```
+
+## script should be here
+
+<script src="https://rawgit.com/adobe-webplatform/Snap.svg/master/dist/snap.svg-min.js">
+
+  window.onload = function () {
+      var s = Snap("#blobb");
+console.log("executed");
+      var shadow = s.ellipse(250,550,150,10);
+
+      var bunnybody = s.path("M150 0L150 300 200 450 250 500 300 450 350 300 350 0 250 200");
+
+      var leftEye = s.circle(200,300,15);
+
+      var rightEye = s.circle(300,300,15);
+
+      bunnybody.attr({
+          fill: "#fff",
+          stroke: "#fff"
+      });
+
+      shadow.attr({
+          fill: "#666"
+      });
+
+      leftEye.attr({
+          fill: "#000",
+          stroke: "#fff"
+      });
+
+      rightEye.attr({
+          fill: "#000",
+          stroke: "#fff"
+      });
+
+      bunnybody.animate({d: "M150 0L50 300 100 450 250 500 400 450 450 300 350 0 250 200"}, 1000);
+      rightEye.animate({ x: 80, y: 10, r: 30 }, 1000);
+      leftEye.animate({ r: "10" }, 1000);
+
+  };
+
+</script>
+
+<div id="blobb"></div>
