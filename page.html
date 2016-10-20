@@ -20,24 +20,50 @@
 <script src="page_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="page_files/bootstrap-3.3.5/shim/respond.min.js"></script>
 
+
 <style type="text/css">code{white-space: pre;}</style>
-<link rel="stylesheet"
-      href="page_files/highlight/default.css"
-      type="text/css" />
-<script src="page_files/highlight/highlight.js"></script>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
-}
-</script>
-
 
 
 <style type="text/css">
@@ -67,6 +93,9 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
 
 </head>
 
@@ -120,18 +149,63 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(rmarkdown)
-blub &lt;- sample(1:100, 1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rmarkdown)
+blub &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;/home/chris/Projects/ham-app/&quot;</span>)
+rawData &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">text =</span><span class="kw">system</span>(<span class="st">&#39;git log --pretty=tformat: --numstat | cut -f 1,2&#39;</span>, <span class="dt">intern =</span> T), <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+<span class="kw">str</span>(rawData)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    2210 obs. of  2 variables:
+##  $ V1: chr  &quot;1&quot; &quot;1&quot; &quot;14&quot; &quot;3&quot; ...
+##  $ V2: chr  &quot;1&quot; &quot;1&quot; &quot;0&quot; &quot;3&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">toNA &lt;-<span class="st"> </span>function(x) {
+  if(<span class="kw">identical</span>(<span class="st">&quot;-&quot;</span>, x)) {
+    <span class="ot">NA</span>
+  } else {
+    x
+  }
+}
+
+polishedData &lt;-<span class="st"> </span>rawData
+polishedData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">lapply</span>(polishedData, toNA), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+polishedData$V1 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(rawData$V1)</code></pre></div>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">polishedData$V2 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(rawData$V2)</code></pre></div>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">polishedData$linesAdded &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(rawData$V1)</code></pre></div>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">polishedData$linesSubtracted &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(rawData$V2)</code></pre></div>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">polishedData &lt;-<span class="st"> </span>polishedData[<span class="kw">complete.cases</span>(polishedData),]
+
+meanLinesAdded =<span class="st"> </span><span class="kw">mean</span>(polishedData$linesAdded)
+meanLinesSubtracted =<span class="st"> </span><span class="kw">mean</span>(polishedData$linesSubtracted)
+meanGrowth =<span class="st"> </span>meanLinesAdded -<span class="st"> </span>meanLinesSubtracted
+
+index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(polishedData), <span class="dv">1</span>)
+randomRow &lt;-<span class="st"> </span>polishedData[index,]
+addedLinesForRow =<span class="st"> </span>randomRow$linesAdded -<span class="st"> </span>randomRow$linesSubtracted</code></pre></div>
 <div id="script-should-be-here" class="section level2">
 <h2>script should be here</h2>
-<script src="https://rawgit.com/adobe-webplatform/Snap.svg/master/dist/snap.svg-min.js">
-
+<script>
   window.onload = function () {
       var s = Snap("#blobb");
-console.log("executed");
-      var shadow = s.ellipse(250,550,150,10);
 
-      var bunnybody = s.path("M150 0L150 300 200 450 250 500 300 450 350 300 350 0 250 200");
+      var shadow = s.ellipse(250,550,150,10);
+      var growthFactor = 0;
+
+      var meanGrowth = 10.5382803;
+      var addedLinesForRow = 43;
+      console.log("addedLinesForRow: ", addedLinesForRow);
+      console.log("index: ", 320);
+      console.log("meanGrowth: ", 10.5382803);
+      if(addedLinesForRow > 5*meanGrowth) {
+        growthFactor = 100;
+      } else if ( addedLinesForRow > 2 * meanGrowth) {
+        growthFactor = 50;
+      }
+
+      var bunnybody = s.path("M150 0,L150 300, 200 450, 250 500, 300 450, 350 300, 350 0, 250 200");
 
       var leftEye = s.circle(200,300,15);
 
@@ -156,16 +230,15 @@ console.log("executed");
           stroke: "#fff"
       });
 
-      bunnybody.animate({d: "M150 0L50 300 100 450 250 500 400 450 450 300 350 0 250 200"}, 1000);
+      bunnybody.animate({d: "M150 0, L" + (150 - growthFactor) + " 300, " + (200 - growthFactor) + " 450, 250 500, " + (300 + growthFactor) + " 450, " + (350 + growthFactor) + " 300, 350 0, 250 200"}, 1000);
       rightEye.animate({ x: 80, y: 10, r: 30 }, 1000);
       leftEye.animate({ r: "10" }, 1000);
 
   };
 
 </script>
-<div id="blobb">
-
-</div>
+<svg id="blobb">
+</svg>
 </div>
 
 
@@ -182,15 +255,6 @@ $(document).ready(function () {
 
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 </body>
 </html>
